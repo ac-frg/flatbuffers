@@ -667,6 +667,113 @@ class JsTsGenerator : public BaseGenerator {
     }
   }
 
+  std::string NativeName(const StructDef &struct_def) {
+    return parser_.opts.object_prefix + struct_def.name +
+           parser_.opts.object_suffix;
+  }
+
+  std::string NativeName(const EnumDef &enum_def) { return enum_def.name; }
+
+  template<typename FieldDef>
+  std::string GenNativePrefixedTypeName(const FieldDef &field_def) {
+    auto native_name =
+        WrapInNameSpace(field_def.defined_namespace, NativeName(field_def));
+    return GenPrefixedTypeName(native_name, field_def.file);
+  }
+
+  std::string NativeType(const Type &type) {
+    if (IsScalar(type.base_type)) {
+      if (type.enum_def == nullptr) {
+        if (type.base_type == BASE_TYPE_BOOL) {
+          return "boolean";
+        } else {
+          return "number";
+        }
+      } else {
+        return GenNativePrefixedTypeName(*type.enum_def);
+      }
+    } else if (type.base_type == BASE_TYPE_STRING) {
+      return "string";
+    } else if (type.base_type == BASE_TYPE_VECTOR) {
+      return NativeType(type.VectorType()) + "[]";
+    } else if (type.base_type == BASE_TYPE_ARRAY) {
+      // Use a tuple
+      std::string result = "[";
+      auto native_name = NativeType(type.VectorType());
+      for (int i = 0; i < type.fixed_length; ++i) {
+        if (i > 0) { result += ", "; }
+        result += native_name;
+      }
+      result += ']';
+      return result;
+    } else if (type.base_type == BASE_TYPE_STRUCT) {
+      return GenNativePrefixedTypeName(*type.struct_def);
+    } else if (type.base_type == BASE_TYPE_UNION) {
+      // TODO not supported yet
+      FLATBUFFERS_ASSERT(0);
+      return GenNativePrefixedTypeName(*type.enum_def);
+    }
+    FLATBUFFERS_ASSERT(0);
+    return std::string();
+  }
+
+  std::string GenNativeDefault(const Value &value) {
+    const Type &type = value.type;
+    if (IsScalar(type.base_type)) {
+      if (type.enum_def != nullptr || type.base_type == BASE_TYPE_BOOL) {
+        return GenDefaultValue(value, "");
+      } else {
+        return value.constant;
+      }
+    } else if (type.base_type == BASE_TYPE_STRING) {
+      // Similar to native C++; an empty string is always present
+      return "''";
+    } else if (type.base_type == BASE_TYPE_VECTOR) {
+      // As above
+      return "[]";
+    } else if (type.base_type == BASE_TYPE_ARRAY) {
+      auto element_value = value;
+      element_value.type = value.type.VectorType();
+      auto native_default = GenNativeDefault(element_value);
+      std::string result = "[";
+      for (int i = 0; i < type.fixed_length; ++i) {
+        if (i > 0) { result += ", "; }
+        result += native_default;
+      }
+      result += ']';
+      return result;
+    }
+    return std::string();
+  }
+
+  void GenNativeTable(const Parser &parser, const StructDef &struct_def,
+                      std::string *code_ptr) {
+    (void)parser;
+
+    std::string &code = *code_ptr;
+    const auto native_name = NativeName(struct_def);
+
+    // Generate a class that can hold an unpacked version of this table.
+    code += "export class " + native_name;
+    code += " {\n";
+
+    for (auto it = struct_def.fields.vec.begin();
+         it != struct_def.fields.vec.end(); ++it) {
+      const FieldDef &field = **it;
+      if (field.deprecated) continue;
+      if (IsScalar(field.value.type.base_type) &&
+          field.value.type.enum_def != nullptr &&
+          field.value.type.enum_def->is_union)
+        continue;
+      auto optional = field.required ? "" : "?";
+      auto default_value = GenNativeDefault(field.value);
+      code += "\t" + MakeCamel(field.name, false) + optional + ": " +
+              NativeType(field.value.type) +
+              (default_value.empty() ? "" : " = ") + default_value + ";\n";
+    }
+    code += "}\n\n";
+  }
+
   // Generate an accessor struct with constructor for a flatbuffers struct.
   void GenStruct(const Parser &parser, StructDef &struct_def,
                  std::string *code_ptr, std::string *exports_ptr,
@@ -684,6 +791,9 @@ class JsTsGenerator : public BaseGenerator {
       GenDocComment(struct_def.doc_comment, code_ptr, "@constructor");
       if (!object_namespace.empty()) {
         code += "export namespace " + object_namespace + "{\n";
+      }
+      if (parser.opts.generate_object_based_api) {
+        GenNativeTable(parser, struct_def, code_ptr);
       }
       code += "export class " + struct_def.name;
       code += " {\n";
