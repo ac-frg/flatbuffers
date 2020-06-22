@@ -583,6 +583,8 @@ class JsTsGenerator : public BaseGenerator {
     for (auto it = struct_def.fields.vec.rbegin();
          it != struct_def.fields.vec.rend(); ++it) {
       auto &field = **it;
+      if (IsArray(field.value.type))
+        continue;
       if (field.padding) {
         *body += "  builder.pad(" + NumToString(field.padding) + ");\n";
       }
@@ -1008,6 +1010,10 @@ class JsTsGenerator : public BaseGenerator {
                     GenGetter(field.value.type, "(obj, this.bb_pos + offset)") +
                     " : null;\n";
             break;
+
+          case BASE_TYPE_ARRAY:
+            // TODO implement
+            continue;
 
           default: FLATBUFFERS_ASSERT(0);
         }

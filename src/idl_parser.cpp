@@ -2202,6 +2202,7 @@ bool Parser::SupportsAdvancedUnionFeatures() const {
 bool Parser::SupportsAdvancedArrayFeatures() const {
   return (opts.lang_to_generate &
           ~(IDLOptions::kCpp | IDLOptions::kPython | IDLOptions::kJava |
+            IDLOptions::kJs | IDLOptions::kTs |
             IDLOptions::kCSharp | IDLOptions::kJsonSchema | IDLOptions::kJson |
             IDLOptions::kBinary)) == 0;
 }
