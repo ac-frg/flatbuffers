@@ -1246,7 +1246,9 @@ class JsTsGenerator : public BaseGenerator {
       std::string annotations =
           GenTypeAnnotation(kParam, "flatbuffers.Builder", "builder");
       std::string arguments;
-      GenStructArgs(struct_def, &annotations, &arguments, "");
+      // Minimize argument clash with reserved keyword
+      const std::string argprefix = "_";
+      GenStructArgs(struct_def, &annotations, &arguments, argprefix);
       GenDocComment(code_ptr, annotations + GenTypeAnnotation(
                                                 kReturns, "flatbuffers.Offset",
                                                 "", false));
@@ -1261,7 +1263,7 @@ class JsTsGenerator : public BaseGenerator {
         code += arguments + ") {\n";
       }
 
-      GenStructBody(struct_def, &code, "");
+      GenStructBody(struct_def, &code, argprefix);
       code += "  return builder.offset();\n};\n\n";
     } else {
       // Generate a method to start building a new object
@@ -1484,6 +1486,8 @@ class JsTsGenerator : public BaseGenerator {
 
   static std::string GetArgName(const FieldDef &field) {
     auto argname = MakeCamel(field.name, false);
+    // Minimize argument clash with reserved keyword
+    argname.insert(argname.begin(), '_');
     if (!IsScalar(field.value.type.base_type)) { argname += "Offset"; }
 
     return argname;
