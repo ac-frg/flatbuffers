@@ -199,9 +199,9 @@ inline flatbuffers::Offset<TableInNestedNS> CreateTableInNestedNS(flatbuffers::F
 
 inline const flatbuffers::TypeTable *EnumInNestedNSTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 }
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     NamespaceA::NamespaceB::EnumInNestedNSTypeTable
@@ -212,28 +212,28 @@ inline const flatbuffers::TypeTable *EnumInNestedNSTypeTable() {
     "C"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *TableInNestedNSTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const char * const names[] = {
     "foo"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, names
+    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *StructInNestedNSTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_INT, 0, -1 },
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_INT, 0, 0, -1 },
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const int64_t values[] = { 0, 4, 8 };
   static const char * const names[] = {
@@ -241,7 +241,7 @@ inline const flatbuffers::TypeTable *StructInNestedNSTypeTable() {
     "b"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 2, type_codes, nullptr, values, names
+    flatbuffers::ST_STRUCT, 2, type_codes, nullptr, nullptr, values, names
   };
   return &tt;
 }

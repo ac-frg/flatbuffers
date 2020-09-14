@@ -713,13 +713,13 @@ inline void CharacterUnion::Reset() {
 
 inline const flatbuffers::TypeTable *CharacterTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 1 },
-    { flatbuffers::ET_SEQUENCE, 0, 2 },
-    { flatbuffers::ET_SEQUENCE, 0, 2 },
-    { flatbuffers::ET_STRING, 0, -1 },
-    { flatbuffers::ET_STRING, 0, -1 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, -1 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 1 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 2 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 2 },
+    { flatbuffers::ET_STRING, 0, 0, -1 },
+    { flatbuffers::ET_STRING, 0, 0, -1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     AttackerTypeTable,
@@ -736,58 +736,58 @@ inline const flatbuffers::TypeTable *CharacterTypeTable() {
     "Unused"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 7, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 7, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *AttackerTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const char * const names[] = {
     "sword_attack_damage"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, names
+    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *RapunzelTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const int64_t values[] = { 0, 4 };
   static const char * const names[] = {
     "hair_length"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 1, type_codes, nullptr, values, names
+    flatbuffers::ST_STRUCT, 1, type_codes, nullptr, nullptr, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *BookReaderTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const int64_t values[] = { 0, 4 };
   static const char * const names[] = {
     "books_read"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 1, type_codes, nullptr, values, names
+    flatbuffers::ST_STRUCT, 1, type_codes, nullptr, nullptr, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *MovieTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_UTYPE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_UTYPE, 1, 0 },
-    { flatbuffers::ET_SEQUENCE, 1, 0 }
+    { flatbuffers::ET_UTYPE, 0, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 },
+    { flatbuffers::ET_UTYPE, 1, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 1, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     CharacterTypeTable
@@ -799,7 +799,7 @@ inline const flatbuffers::TypeTable *MovieTypeTable() {
     "characters"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 4, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 4, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }

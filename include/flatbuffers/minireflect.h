@@ -234,10 +234,12 @@ inline void IterateObject(const uint8_t *obj, const TypeTable *type_table,
   visitor->StartSequence();
   const uint8_t *prev_val = nullptr;
   size_t set_idx = 0;
+  size_t array_idx = 0;
   for (size_t i = 0; i < type_table->num_elems; i++) {
     auto type_code = type_table->type_codes[i];
     auto type = static_cast<ElementaryType>(type_code.base_type);
     auto is_vector = type_code.is_vector != 0;
+    auto is_array = type_code.is_array != 0;
     auto ref_idx = type_code.sequence_ref;
     const TypeTable *ref = nullptr;
     if (ref_idx >= 0) { ref = type_table->type_refs[ref_idx](); }
@@ -252,12 +254,20 @@ inline void IterateObject(const uint8_t *obj, const TypeTable *type_table,
     visitor->Field(i, set_idx, type, is_vector, ref, name, val);
     if (val) {
       set_idx++;
-      if (is_vector) {
-        val += ReadScalar<uoffset_t>(val);
-        auto vec = reinterpret_cast<const Vector<uint8_t> *>(val);
+      if (is_vector || is_array) {
+        auto elem_ptr = val;
+        size_t size = 0;
+        if (is_vector) {
+          val += ReadScalar<uoffset_t>(val);
+          auto vec = reinterpret_cast<const Vector<uint8_t> *>(val);
+          elem_ptr = vec->Data();
+          size = vec->size();
+        } else {
+          size = type_table->array_sizes[array_idx];
+          ++array_idx;
+        }
         visitor->StartVector();
-        auto elem_ptr = vec->Data();
-        for (size_t j = 0; j < vec->size(); j++) {
+        for (size_t j = 0; j < size; j++) {
           visitor->Element(j, type, ref, elem_ptr);
           IterateValue(type, elem_ptr, ref, prev_val, static_cast<soffset_t>(j),
                        visitor);

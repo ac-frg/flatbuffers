@@ -310,9 +310,9 @@ inline flatbuffers::Offset<ArrayTable> CreateArrayTable(flatbuffers::FlatBufferB
 
 inline const flatbuffers::TypeTable *TestEnumTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 }
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Example::TestEnumTypeTable
@@ -323,21 +323,22 @@ inline const flatbuffers::TypeTable *TestEnumTypeTable() {
     "C"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *NestedStructTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, -1 }
+    { flatbuffers::ET_INT, 0, 1, -1 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 1, 0 },
+    { flatbuffers::ET_LONG, 0, 1, -1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Example::TestEnumTypeTable
   };
+  static const int16_t array_sizes[] = { 2, 2, 2,  };
   static const int64_t values[] = { 0, 8, 9, 16, 32 };
   static const char * const names[] = {
     "a",
@@ -346,23 +347,24 @@ inline const flatbuffers::TypeTable *NestedStructTypeTable() {
     "d"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 4, type_codes, type_refs, values, names
+    flatbuffers::ST_STRUCT, 4, type_codes, type_refs, array_sizes, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *ArrayStructTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_CHAR, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_INT, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, -1 }
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_INT, 0, 1, -1 },
+    { flatbuffers::ET_CHAR, 0, 0, -1 },
+    { flatbuffers::ET_SEQUENCE, 0, 1, 0 },
+    { flatbuffers::ET_INT, 0, 0, -1 },
+    { flatbuffers::ET_LONG, 0, 1, -1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Example::NestedStructTypeTable
   };
+  static const int16_t array_sizes[] = { 15, 2, 2,  };
   static const int64_t values[] = { 0, 4, 64, 72, 136, 144, 160 };
   static const char * const names[] = {
     "a",
@@ -373,14 +375,14 @@ inline const flatbuffers::TypeTable *ArrayStructTypeTable() {
     "f"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 6, type_codes, type_refs, values, names
+    flatbuffers::ST_STRUCT, 6, type_codes, type_refs, array_sizes, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *ArrayTableTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Example::ArrayStructTypeTable
@@ -389,7 +391,7 @@ inline const flatbuffers::TypeTable *ArrayTableTypeTable() {
     "a"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }

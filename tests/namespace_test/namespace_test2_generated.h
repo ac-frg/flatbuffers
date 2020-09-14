@@ -425,9 +425,9 @@ inline flatbuffers::Offset<SecondTableInA> CreateSecondTableInA(flatbuffers::Fla
 
 inline const flatbuffers::TypeTable *TableInFirstNSTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 1 },
-    { flatbuffers::ET_SEQUENCE, 0, 2 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 1 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 2 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     NamespaceA::NamespaceB::TableInNestedNSTypeTable,
@@ -440,7 +440,7 @@ inline const flatbuffers::TypeTable *TableInFirstNSTypeTable() {
     "foo_struct"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 3, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
@@ -451,8 +451,8 @@ namespace NamespaceC {
 
 inline const flatbuffers::TypeTable *TableInCTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 1 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     NamespaceA::TableInFirstNSTypeTable,
@@ -463,7 +463,7 @@ inline const flatbuffers::TypeTable *TableInCTypeTable() {
     "refer_to_a2"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 2, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
@@ -474,7 +474,7 @@ namespace NamespaceA {
 
 inline const flatbuffers::TypeTable *SecondTableInATypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     NamespaceC::TableInCTypeTable
@@ -483,7 +483,7 @@ inline const flatbuffers::TypeTable *SecondTableInATypeTable() {
     "refer_to_c"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }

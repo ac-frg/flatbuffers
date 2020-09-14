@@ -158,9 +158,9 @@ inline flatbuffers::Offset<ApplicationData> CreateApplicationData(flatbuffers::F
 
 inline const flatbuffers::TypeTable *Vector3DTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 }
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 }
   };
   static const int64_t values[] = { 0, 4, 8, 12 };
   static const char * const names[] = {
@@ -169,14 +169,14 @@ inline const flatbuffers::TypeTable *Vector3DTypeTable() {
     "z"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 3, type_codes, nullptr, values, names
+    flatbuffers::ST_STRUCT, 3, type_codes, nullptr, nullptr, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *ApplicationDataTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 1, 0 }
+    { flatbuffers::ET_SEQUENCE, 1, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     Geometry::Vector3DTypeTable
@@ -185,7 +185,7 @@ inline const flatbuffers::TypeTable *ApplicationDataTypeTable() {
     "vectors"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 1, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }

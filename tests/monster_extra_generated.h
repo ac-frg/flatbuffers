@@ -316,17 +316,17 @@ inline flatbuffers::Offset<MonsterExtra> CreateMonsterExtra(flatbuffers::FlatBuf
 
 inline const flatbuffers::TypeTable *MonsterExtraTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_DOUBLE, 0, -1 },
-    { flatbuffers::ET_DOUBLE, 0, -1 },
-    { flatbuffers::ET_DOUBLE, 0, -1 },
-    { flatbuffers::ET_DOUBLE, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_DOUBLE, 1, -1 },
-    { flatbuffers::ET_FLOAT, 1, -1 },
-    { flatbuffers::ET_INT, 0, -1 }
+    { flatbuffers::ET_DOUBLE, 0, 0, -1 },
+    { flatbuffers::ET_DOUBLE, 0, 0, -1 },
+    { flatbuffers::ET_DOUBLE, 0, 0, -1 },
+    { flatbuffers::ET_DOUBLE, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_DOUBLE, 1, 0, -1 },
+    { flatbuffers::ET_FLOAT, 1, 0, -1 },
+    { flatbuffers::ET_INT, 0, 0, -1 }
   };
   static const char * const names[] = {
     "d0",
@@ -342,7 +342,7 @@ inline const flatbuffers::TypeTable *MonsterExtraTypeTable() {
     "deprec"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 11, type_codes, nullptr, nullptr, names
+    flatbuffers::ST_TABLE, 11, type_codes, nullptr, nullptr, nullptr, names
   };
   return &tt;
 }

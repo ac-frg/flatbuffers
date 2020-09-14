@@ -720,9 +720,9 @@ inline void EquipmentUnion::Reset() {
 
 inline const flatbuffers::TypeTable *ColorTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 },
-    { flatbuffers::ET_CHAR, 0, 0 }
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 },
+    { flatbuffers::ET_CHAR, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Sample::ColorTypeTable
@@ -733,15 +733,15 @@ inline const flatbuffers::TypeTable *ColorTypeTable() {
     "Blue"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_ENUM, 3, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *EquipmentTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, -1 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Sample::WeaponTypeTable
@@ -751,16 +751,16 @@ inline const flatbuffers::TypeTable *EquipmentTypeTable() {
     "Weapon"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *Vec3TypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 },
-    { flatbuffers::ET_FLOAT, 0, -1 }
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 },
+    { flatbuffers::ET_FLOAT, 0, 0, -1 }
   };
   static const int64_t values[] = { 0, 4, 8, 12 };
   static const char * const names[] = {
@@ -769,24 +769,24 @@ inline const flatbuffers::TypeTable *Vec3TypeTable() {
     "z"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_STRUCT, 3, type_codes, nullptr, values, names
+    flatbuffers::ST_STRUCT, 3, type_codes, nullptr, nullptr, values, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *MonsterTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SHORT, 0, -1 },
-    { flatbuffers::ET_SHORT, 0, -1 },
-    { flatbuffers::ET_STRING, 0, -1 },
-    { flatbuffers::ET_BOOL, 0, -1 },
-    { flatbuffers::ET_UCHAR, 1, -1 },
-    { flatbuffers::ET_CHAR, 0, 1 },
-    { flatbuffers::ET_SEQUENCE, 1, 2 },
-    { flatbuffers::ET_UTYPE, 0, 3 },
-    { flatbuffers::ET_SEQUENCE, 0, 3 },
-    { flatbuffers::ET_SEQUENCE, 1, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0, 0 },
+    { flatbuffers::ET_SHORT, 0, 0, -1 },
+    { flatbuffers::ET_SHORT, 0, 0, -1 },
+    { flatbuffers::ET_STRING, 0, 0, -1 },
+    { flatbuffers::ET_BOOL, 0, 0, -1 },
+    { flatbuffers::ET_UCHAR, 1, 0, -1 },
+    { flatbuffers::ET_CHAR, 0, 0, 1 },
+    { flatbuffers::ET_SEQUENCE, 1, 0, 2 },
+    { flatbuffers::ET_UTYPE, 0, 0, 3 },
+    { flatbuffers::ET_SEQUENCE, 0, 0, 3 },
+    { flatbuffers::ET_SEQUENCE, 1, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     MyGame::Sample::Vec3TypeTable,
@@ -808,22 +808,22 @@ inline const flatbuffers::TypeTable *MonsterTypeTable() {
     "path"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 11, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_TABLE, 11, type_codes, type_refs, nullptr, nullptr, names
   };
   return &tt;
 }
 
 inline const flatbuffers::TypeTable *WeaponTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_STRING, 0, -1 },
-    { flatbuffers::ET_SHORT, 0, -1 }
+    { flatbuffers::ET_STRING, 0, 0, -1 },
+    { flatbuffers::ET_SHORT, 0, 0, -1 }
   };
   static const char * const names[] = {
     "name",
     "damage"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 2, type_codes, nullptr, nullptr, names
+    flatbuffers::ST_TABLE, 2, type_codes, nullptr, nullptr, nullptr, names
   };
   return &tt;
 }
