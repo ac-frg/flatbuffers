@@ -767,7 +767,7 @@ class JsTsGenerator : public BaseGenerator {
         continue;
       auto optional = field.required ? "" : "?";
       auto default_value = GenNativeDefault(field.value);
-      code += "\t" + MakeCamel(field.name, false) + optional + ": " +
+      code += "\t" + field.name + optional + ": " +
               NativeType(field.value.type) +
               (default_value.empty() ? "" : " = ") + default_value + ";\n";
     }
