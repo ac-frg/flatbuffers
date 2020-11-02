@@ -777,7 +777,7 @@ class JsTsGenerator : public BaseGenerator {
   // Generate an accessor struct with constructor for a flatbuffers struct.
   void GenStruct(const Parser &parser, StructDef &struct_def,
                  std::string *code_ptr, std::string *exports_ptr,
-                 imported_fileset &imported_files) {
+                 imported_fileset &imported_files, bool fake = false) {
     if (struct_def.generated) return;
     std::string &code = *code_ptr;
     std::string &exports = *exports_ptr;
@@ -785,15 +785,29 @@ class JsTsGenerator : public BaseGenerator {
     std::string object_name;
     std::string object_namespace = GetNameSpace(struct_def);
 
+    // Emit object API
+    if (!fake && lang_.language == IDLOptions::kTs &&
+        parser.opts.generate_object_based_api) {
+      GenDocComment(struct_def.doc_comment, code_ptr, "@class");
+      if (!object_namespace.empty()) {
+        code += "export namespace " + object_namespace + "{\n";
+      }
+      GenNativeTable(parser, struct_def, code_ptr);
+      if (!object_namespace.empty()) { code += "}\n"; }
+      // fake generation of regular code to trigger imports
+      // TODO make non-exclusive again
+      std::string dummy_code;
+      std::string dummy_exports;
+      return GenStruct(parser, struct_def, &dummy_code, &dummy_exports,
+                       imported_files, true);
+    }
+
     // Emit constructor
     if (lang_.language == IDLOptions::kTs) {
       object_name = struct_def.name;
       GenDocComment(struct_def.doc_comment, code_ptr, "@constructor");
       if (!object_namespace.empty()) {
         code += "export namespace " + object_namespace + "{\n";
-      }
-      if (parser.opts.generate_object_based_api) {
-        GenNativeTable(parser, struct_def, code_ptr);
       }
       code += "export class " + struct_def.name;
       code += " {\n";
