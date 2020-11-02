@@ -332,6 +332,8 @@ int FlatCompiler::Compile(int argc, const char **argv) {
         opts.reexport_ts_modules = false;
       } else if (arg == "--short-names") {
         opts.js_ts_short_names = true;
+      } else if (arg == "--ts-string-enums") {
+        opts.ts_string_enums = true;
       } else if (arg == "--reflect-types") {
         opts.mini_reflect = IDLOptions::kTypes;
       } else if (arg == "--reflect-names") {

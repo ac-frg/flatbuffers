@@ -361,7 +361,12 @@ class JsTsGenerator : public BaseGenerator {
       } else {
         code += "  " + ev.name;
         code += lang_.language == IDLOptions::kTs ? "= " : ": ";
-        code += enum_def.ToString(ev);
+        if (lang_.language == IDLOptions::kTs && parser_.opts.ts_string_enums) {
+          // TODO also needs processing for function parameters elsewhere
+          code += "'" + ev.name + "'";
+        } else {
+          code += enum_def.ToString(ev);
+        }
       }
 
       code += (it + 1) != enum_def.Vals().end() ? ",\n" : "\n";
