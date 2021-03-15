@@ -747,6 +747,8 @@ class JsTsGenerator : public BaseGenerator {
       }
       result += ']';
       return result;
+    } else if (type.base_type == BASE_TYPE_STRUCT) {
+      return "new " + NativeType(type) + "()";
     }
     return std::string();
   }
@@ -771,7 +773,13 @@ class JsTsGenerator : public BaseGenerator {
           field.value.type.enum_def->is_union)
         continue;
       auto optional = field.required ? "" : "?";
-      auto default_value = GenNativeDefault(field.value);
+      // Scalar default is always provided for convenience,
+      // whether for common use or access to field default value
+      // (without reflection inspection).
+      auto add_default = field.required ||
+                         IsScalar(field.value.type.base_type) ||
+                         field.value.type.base_type == BASE_TYPE_VECTOR;
+      auto default_value = add_default ? GenNativeDefault(field.value) : "";
       code += "\t" + field.name + optional + ": " +
               NativeType(field.value.type) +
               (default_value.empty() ? "" : " = ") + default_value + ";\n";
