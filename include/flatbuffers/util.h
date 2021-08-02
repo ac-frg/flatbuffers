@@ -589,8 +589,12 @@ inline bool EscapeString(const char *s, size_t length, std::string *_text,
           int ucc = FromUTF8(&utf8);
           if (ucc < 0) {
             if (allow_non_utf8) {
-              text += "\\x";
-              text += IntToStringHex(static_cast<uint8_t>(c), 2);
+              if (natural_utf8) {
+                text += c;
+              } else {
+                text += "\\x";
+                text += IntToStringHex(static_cast<uint8_t>(c), 2);
+              }
             } else {
               // There are two cases here:
               //
