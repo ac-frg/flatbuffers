@@ -18,6 +18,7 @@
 #define FLATBUFFERS_UTIL_H_
 
 #include <errno.h>
+#include <cmath>
 
 #include "flatbuffers/base.h"
 
@@ -152,6 +153,12 @@ inline std::string NumToString<unsigned long long>(unsigned long long t) {
 template<typename T> std::string FloatToString(T t, int precision) {
   // clang-format off
 
+  // serialize special cases according to JSON5 spec
+  if (std::isnan(t)) {
+    return "NaN";
+  } else if (std::isinf(t)) {
+    return t > 0 ? "Infinity" : "-Infinity";
+  }
   #ifndef FLATBUFFERS_PREFER_PRINTF
     // to_string() prints different numbers of digits for floats depending on
     // platform and isn't available on Android, so we use stringstream
