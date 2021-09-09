@@ -316,6 +316,11 @@ template<typename T>
 inline bool StringToFloatImpl(T *val, const char *const str) {
   // Type T must be either float or double.
   FLATBUFFERS_ASSERT(str && val);
+  // Accept special case not covered by usual literals
+  if (strcmp(str, "null") == 0) {
+    *val = NAN;
+    return true;
+  };
   auto end = str;
   strtoval_impl(val, str, const_cast<char **>(&end));
   auto done = (end != str) && (*end == '\0');
