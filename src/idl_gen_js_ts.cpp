@@ -381,6 +381,38 @@ class JsTsGenerator : public BaseGenerator {
     }
 
     if (lang_.language == IDLOptions::kTs && !ns.empty()) { code += "}"; }
+
+    if (lang_.language == IDLOptions::kTs && parser_.opts.ts_string_enums) {
+      const auto enum_def_begin = enum_def.Vals().begin();
+      const auto enum_def_end = enum_def.Vals().end();
+      // Add some helper functions to convert from/to number
+      code += "\n";
+      code += "export namespace " + enum_def.name + "{\n";
+      // Enum string to number
+      code += "export function toNumber(value: " + enum_def.name +
+              "): number | undefined {\n";
+
+      code += "  switch(value) {\n";
+      for (auto it = enum_def_begin; it != enum_def_end; ++it) {
+        auto &ev = **it;
+        code += "  case " + enum_def.name + "." + ev.name + ": return " +
+                enum_def.ToString(ev) + ";\n";
+      }
+      code += "  }\n";
+      code += "}\n";
+      // Number to enum string
+      code += "export function fromNumber(value: number): " + enum_def.name +
+              " | undefined {\n";
+      code += "  switch(value) {\n";
+      for (auto it = enum_def_begin; it != enum_def_end; ++it) {
+        auto &ev = **it;
+        code += "  case " + enum_def.ToString(ev) + ": return " +
+                enum_def.name + "." + ev.name + ";\n";
+      }
+      code += "  }\n";
+      code += "}}";
+    }
+
     code += "};\n\n";
   }
 
