@@ -388,6 +388,12 @@ class JsTsGenerator : public BaseGenerator {
       // Add some helper functions to convert from/to number
       code += "\n";
       code += "export namespace " + enum_def.name + "{\n";
+      // Get all values (Object.values also lists the functions)
+      code += "export function values(): " + enum_def.name + "[] {\n";
+      code += "  return Object.values(" + enum_def.name +
+              ").filter((v) => typeof v === 'string') as " + enum_def.name +
+              "[];\n";
+      code += "}\n";
       // Enum string to number
       code += "export function toNumber(value: " + enum_def.name +
               "): number | undefined {\n";
