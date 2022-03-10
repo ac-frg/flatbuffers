@@ -380,6 +380,20 @@ class JsTsGenerator : public BaseGenerator {
       }
     }
 
+    if (lang_.language == IDLOptions::kTs && parser_.opts.ts_string_enums) {
+      // Also add a numeric variant when using string enums, this way a two way
+      // conversion is possible (numeric enum members have a reverse mapping)
+      code += "}\n";
+      code += "export enum " + enum_def.name + "Numeric{\n";
+      for (auto it = enum_def.Vals().begin(); it != enum_def.Vals().end();
+           ++it) {
+        auto &ev = **it;
+        code += "  " + ev.name + "= ";
+        code += enum_def.ToString(ev);
+        code += (it + 1) != enum_def.Vals().end() ? ",\n" : "\n";
+      }
+    }
+
     if (lang_.language == IDLOptions::kTs && !ns.empty()) { code += "}"; }
     code += "};\n\n";
   }
