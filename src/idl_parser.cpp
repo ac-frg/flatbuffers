@@ -1709,8 +1709,11 @@ CheckedError Parser::ParseSingleValue(const std::string *name, Value &e,
           ", value: " + attribute_);
     }
 
+    const bool accept_scalar =
+        opts.convert_json_value || (kTokenStringOrIdent == kTokenIdentifier);
+
     // A boolean as true/false. Boolean as Integer check below.
-    if (!match && IsBool(in_type)) {
+    if (!match && IsBool(in_type) && accept_scalar) {
       auto is_true = attribute_ == "true";
       if (is_true || attribute_ == "false") {
         attribute_ = is_true ? "1" : "0";
@@ -1735,9 +1738,11 @@ CheckedError Parser::ParseSingleValue(const std::string *name, Value &e,
         attribute_.resize(last + 1);
     }
     // Float numbers or nan, inf, pi, etc.
-    TRY_ECHECK(kTokenStringOrIdent, IsFloat(in_type), BASE_TYPE_FLOAT);
+    TRY_ECHECK(kTokenStringOrIdent, IsFloat(in_type) && accept_scalar,
+               BASE_TYPE_FLOAT);
     // An integer constant in string.
-    TRY_ECHECK(kTokenStringOrIdent, IsInteger(in_type), BASE_TYPE_INT);
+    TRY_ECHECK(kTokenStringOrIdent, IsInteger(in_type) && accept_scalar,
+               BASE_TYPE_INT);
     // Unknown tokens will be interpreted as string type.
     // An attribute value may be a scalar or string constant.
     FORCE_ECHECK(kTokenStringConstant, in_type == BASE_TYPE_STRING,

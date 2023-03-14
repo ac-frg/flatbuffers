@@ -512,6 +512,7 @@ struct IDLOptions {
   // Use flexbuffers instead for binary and text generation
   bool use_flexbuffers;
   bool strict_json;
+  bool convert_json_value;
   bool skip_js_exports;
   bool use_goog_js_export_format;
   bool use_ES6_js_export_format;
@@ -605,6 +606,7 @@ struct IDLOptions {
   IDLOptions()
       : use_flexbuffers(false),
         strict_json(false),
+        convert_json_value(true),
         skip_js_exports(false),
         use_goog_js_export_format(false),
         use_ES6_js_export_format(false),
